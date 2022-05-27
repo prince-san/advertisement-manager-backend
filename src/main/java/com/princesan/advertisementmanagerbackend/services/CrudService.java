@@ -10,7 +10,7 @@ public interface CrudService<T> {
 
     T get(Long id);
 
-    T update(T t);
+    T update(Long id, T t);
 
     void delete(Long id);
 }

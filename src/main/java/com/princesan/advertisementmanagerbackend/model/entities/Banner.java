@@ -21,24 +21,24 @@ public class Banner {
     private Long id;
 
     @NotNull
-    @Length(message = "Banner's name can't be shorter than 2 or longer than 30 characters.",
+    @Length(message = "banner's name can't be shorter than 2 or longer than 30 characters",
             min = 2, max = 30)
     @Column(nullable = false, unique = true)
     private String name;
 
     @NotNull
-    @Length(message = "Banner's text can't be longer than 255 characters.", max = 255)
+    @Length(message = "banner's text can't be longer than 255 characters", max = 255)
     @Column(nullable = false)
     private String textField;
 
     @NotNull
-    @Digits(message = "Incorrect price format.", integer = 10, fraction = 2)
-    @PositiveOrZero
+    @Digits(message = "incorrect price format", integer = 10, fraction = 2)
+    @PositiveOrZero(message = "price can't be negative")
     @Column(nullable = false)
     private BigDecimal price;
 
     @NotNull
-    @Size(message = "Banner should represent at least one category.", min = 1)
+    @Size(message = "banner should represent at least one category", min = 1)
     @ManyToMany
     @JoinTable(name = "banner_category",
             joinColumns = @JoinColumn(name = "banner_id", referencedColumnName = "id"),

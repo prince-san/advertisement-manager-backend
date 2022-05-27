@@ -1,6 +1,7 @@
 package com.princesan.advertisementmanagerbackend.services.category;
 
 import com.princesan.advertisementmanagerbackend.exceptions.NoSuchEntityException;
+import com.princesan.advertisementmanagerbackend.model.dtos.BannerDto;
 import com.princesan.advertisementmanagerbackend.model.dtos.CategoryDto;
 import com.princesan.advertisementmanagerbackend.model.entities.Banner;
 import com.princesan.advertisementmanagerbackend.model.entities.Category;
@@ -35,7 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> getAll() {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
-        for (Category category : categoryRepository.findAllByDeletedNotLike(true)) {
+        List<Category> categories = categoryRepository.findAllByDeletedIsFalse();
+        for (Category category : categories) {
             categoryDtoList.add(categoryCategoryDtoTypeMap.map(category));
         }
         return categoryDtoList;
@@ -44,20 +46,24 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto get(Long id) {
         return categoryCategoryDtoTypeMap.map(categoryRepository
-                .findCategoryByIdAndDeletedIsNotLike(id, true)
+                .findCategoryByIdAndDeletedIsFalse(id)
                 .orElseThrow(NoSuchEntityException::new));
     }
 
     @Override
-    public CategoryDto update(CategoryDto categoryDto) {
-        Category category = categoryDtoCategoryTypeMap.map(categoryDto);
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
+        Category category = categoryRepository.findCategoryByIdAndDeletedIsFalse(id).orElseThrow(
+                NoSuchEntityException::new
+        );
+        category.setRequestId(categoryDto.getRequestId());
+        category.setName(categoryDto.getName());
         return categoryCategoryDtoTypeMap.map(categoryRepository.save(category));
     }
 
     @Override
     public void delete(Long id) {
         Category category = categoryRepository
-                .findCategoryByIdAndDeletedIsNotLike(id, true)
+                .findCategoryByIdAndDeletedIsFalse(id)
                 .orElseThrow(NoSuchEntityException::new);
         List<Banner> banners = bannerRepository.findBannersByCategoriesContainsAndDeletedIsNotLike(
                 category, true);
@@ -68,6 +74,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> searchByName(String searchRequest) {
-        return null;
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        for (Category category : categoryRepository
+                .findCategoriesByNameContainsIgnoreCaseAndDeletedIsFalse(searchRequest)) {
+            categoryDtoList.add(categoryCategoryDtoTypeMap.map(category));
+        }
+        return categoryDtoList;
     }
 }

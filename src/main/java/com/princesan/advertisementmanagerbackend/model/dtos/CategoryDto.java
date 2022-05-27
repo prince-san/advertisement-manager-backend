@@ -11,7 +11,8 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public final class CategoryDto implements Serializable {
+public class CategoryDto implements Serializable {
+        private Long id;
         @NotNull
         @Length(message = "Category's name can't be shorter than 2 or longer than 30 characters.",
                 min = 2, max = 30)
@@ -19,7 +20,7 @@ public final class CategoryDto implements Serializable {
         private String name;
         @Pattern(message = "Category's request ID can only contain lowercase latin letters," +
                 " numbers and \"_\" characters.",
-                regexp = "[a-z0-9_]")
+                regexp = "[a-z0-9_]+")
         @Length(message = "Category's request ID can't be shorter than 2 or longer than 30 characters.",
                 max = 30)
         private String requestId;

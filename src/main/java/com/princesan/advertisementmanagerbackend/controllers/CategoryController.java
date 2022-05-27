@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
@@ -30,9 +30,22 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryDto get(@PathVariable String id) {
-        CategoryDto categoryDto = categoryService.get(Long.parseLong(id));
-        System.out.println(categoryDto.getName());
-        return categoryDto;
+    public CategoryDto get(@PathVariable Long id) {
+        return categoryService.get(id);
+    }
+
+    @PutMapping("/{id}")
+    public CategoryDto update(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        return categoryService.update(id, categoryDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
+    }
+
+    @GetMapping("/search")
+    public List<CategoryDto> search(@RequestParam("searchRequest") String searchRequest) {
+        return categoryService.searchByName(searchRequest);
     }
 }

@@ -22,8 +22,6 @@ public class LogRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(message = "IP address must follow default IPv4 format",
-            regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$")
     @NotNull
     @Column(nullable = false)
     private String ipAddress;

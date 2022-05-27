@@ -1,4 +1,4 @@
-package com.princesan.advertisementmanagerbackend.services.banners;
+package com.princesan.advertisementmanagerbackend.services.banner;
 
 import com.princesan.advertisementmanagerbackend.model.dtos.BannerDto;
 import com.princesan.advertisementmanagerbackend.services.CrudService;
